@@ -1,11 +1,14 @@
-import { useState } from 'react'
+import { useState, lazy, Suspense } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
 
+const HeavyComponent = lazy(() => import('../src/HeavyComponent'))
+
 function App() {
   const [count, setCount] = useState(0)
+  
 
   return (
     <>
@@ -31,6 +34,10 @@ function App() {
       </section>
 
       <div className="ticks"></div>
+
+      <Suspense fallback={<div>Loading...</div>}>
+        <HeavyComponent />
+      </Suspense>
 
       <section id="next-steps">
         <div id="docs">
