@@ -1,12 +1,11 @@
-name: Deploy
+name: Deploy Staging
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches: [main]
 
 jobs:
-  deploy:
+  deploy-staging:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -14,15 +13,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
 
       - run: npm install
 
-      - run: npm run build:production
+      - run: npm run build:staging
 
-      - name: Deploy to Cloudflare Pages
+      - name: Deploy to Cloudflare Pages Staging
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=my-project
+          command: pages deploy dist --project-name=my-project-staging --branch=main
